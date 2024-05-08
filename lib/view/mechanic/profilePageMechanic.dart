@@ -17,7 +17,7 @@ class ProfileScreenMechanic extends StatelessWidget {
           ),
           SizedBox(height: 20.0),
           Text(
-            'John Doe',
+            'Gajanan Naik',
             style: TextStyle(
               fontSize: 24.0,
               fontWeight: FontWeight.bold,
@@ -34,17 +34,17 @@ class ProfileScreenMechanic extends StatelessWidget {
           SizedBox(height: 20.0),
           ListTile(
             leading: Icon(Icons.email),
-            title: Text('john.doe@example.com'),
+            title: Text('gajanan_naik@example.com'),
           ),
           Divider(),
           ListTile(
             leading: Icon(Icons.phone),
-            title: Text('+1234567890'),
+            title: Text('+91 8899667755'),
           ),
           Divider(),
           ListTile(
             leading: Icon(Icons.location_on),
-            title: Text('123 Main Street, City'),
+            title: Text('Mangrapoi road, Karwar'),
           ),
           Divider(),
           SizedBox(height: 20.0),

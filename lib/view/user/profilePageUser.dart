@@ -17,7 +17,7 @@ class ProfileScreenUser extends StatelessWidget {
           ),
           SizedBox(height: 20.0),
           Text(
-            'John Doe',
+            'Darshan Patel',
             style: TextStyle(
               fontSize: 24.0,
               fontWeight: FontWeight.bold,
@@ -34,17 +34,17 @@ class ProfileScreenUser extends StatelessWidget {
           SizedBox(height: 20.0),
           ListTile(
             leading: Icon(Icons.email),
-            title: Text('john.doe@example.com'),
+            title: Text('darshanpatel@example.com'),
           ),
           Divider(),
           ListTile(
             leading: Icon(Icons.phone),
-            title: Text('+1234567890'),
+            title: Text('+91 9988776655'),
           ),
           Divider(),
           ListTile(
             leading: Icon(Icons.location_on),
-            title: Text('123 Main Street, City'),
+            title: Text('Patel wada, Karwar'),
           ),
           Divider(),
           SizedBox(height: 20.0),

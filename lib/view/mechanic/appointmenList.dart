@@ -20,8 +20,8 @@ class MechanicViewAppointmentsPage  extends StatelessWidget {
                 return AppointmentCard(
                   appointmentDate: 'Date: ${DateTime.now().add(Duration(days: index)).toString().split(' ')[0]}', // Example date
                   appointmentTime: 'Time: 10:00 AM', // Example time
-                  customerName: 'John Smith', // Example customer name
-                  customerAddress: '456 Oak Street, Town', // Example customer address
+                  customerName: 'Darshan patel', // Example customer name
+                  customerAddress: 'Patel wada, Karwar', // Example customer address
                   status: index % 2 == 0 ? 'Pending' : 'Completed', // Example status
                 );
               },

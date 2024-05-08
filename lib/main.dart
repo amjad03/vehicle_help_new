@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Vehicle Help',
+      title: 'Onclick Mechanic',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -83,6 +83,7 @@ class MainPage extends StatelessWidget {
             if (userEmail != null) {
               // Check if user is staff based on email domain (example)
               bool isMechanic = userEmail.startsWith('mechanic');
+              //mechanic_vijay@gmail.com
 
               // Navigate to the appropriate screen based on user role
               if (isMechanic) {
