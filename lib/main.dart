@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:vehicle_help_new/view/mechanic/mechanicDashboard.dart';
 import 'package:vehicle_help_new/view/mechanic/notificationScreenMechanic.dart';
 import 'package:vehicle_help_new/view/user/homeScreenUser.dart';
 import 'package:vehicle_help_new/view/user/notificationScreenUser.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'firebase_options.dart';
 
@@ -53,14 +56,74 @@ class MyApp extends StatelessWidget {
       ),
       navigatorKey: navigatorKey,
       routes: {
+        '/authScreen': (context) => AuthScreen(),
+        '/mainPage': (context) => MainPage(),
         '/user_notification': (context) => NotificationScreenUser(),
         '/mechanic_notification': (context) => NotificationScreenMechanic(),
       },
       // home: const MyHomePage(title: 'Vehicle Help'),
-      home: MainPage(),
+      // home: MainPage(),
+      home: SplashScreen(),
     );
   }
 }
+
+
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize animation controller
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 2), // Set animation duration
+    );
+    // Start animation
+    _animationController.forward();
+    // Navigate to the next screen after animation completes
+    Timer(Duration(seconds: 3), () {
+      Navigator.pushReplacementNamed(context, '/mainPage');
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blue.shade100,
+      body: Center(
+        child: ScaleTransition(
+          scale: _animationController,
+          child: const Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // FlutterLogo(size: 200),
+              FaIcon(FontAwesomeIcons.wrench, size: 100,), // This will display a wrench icon from Font Awesome
+              SizedBox(height: 15,),
+              Text("Onclick Mechanic", style: TextStyle(fontSize: 30), textAlign: TextAlign.center,)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose(); // Dispose animation controller
+    super.dispose();
+  }
+}
+
 
 class MainPage extends StatelessWidget {
 

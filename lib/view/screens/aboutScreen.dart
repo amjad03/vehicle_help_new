@@ -16,7 +16,7 @@ class AboutPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'About Vehicle Help',
+              'About Onclick Mechanic',
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
@@ -24,7 +24,7 @@ class AboutPage extends StatelessWidget {
             ),
             SizedBox(height: 20.0),
             Text(
-              'Vehicle Help is a convenient and efficient solution for all your automotive repair needs. Whether you\'re facing an urgent breakdown or simply need routine maintenance, "Vehicle Help" connects you with qualified mechanics in your area, ensuring prompt and reliable service.',
+              'Onclick Mechanic is a convenient and efficient solution for all your automotive repair needs. Whether you\'re facing an urgent breakdown or simply need routine maintenance, "Onclick Mechanic" connects you with qualified mechanics in your area, ensuring prompt and reliable service.',
             textAlign: TextAlign.justify,
             ),
             SizedBox(height: 20.0),

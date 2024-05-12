@@ -103,8 +103,8 @@ class _LocationScreenState extends State<LocationScreen> {
                 SizedBox(height: 10,),
                 ElevatedButton(
                     onPressed: (){
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => SearchMechanicsPage(latitude: lat, longitude: long,)));
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SearchMechanicsPage(latitude: 14.833097, longitude: 74.138609,)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => SearchMechanicsPage(latitude: lat, longitude: long,)));
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => SearchMechanicsPage(latitude: 14.833097, longitude: 74.138609,)));
                     },
                     child: Text("Search Mecanics")
                 )

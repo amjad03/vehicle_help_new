@@ -55,3 +55,15 @@ Future<void> logout(BuildContext context) async {
   );
 }
 
+
+Future<void> resetPassword(String email) async {
+  try {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    // Password reset email sent successfully
+  } catch (e) {
+    // An error occurred while sending the password reset email
+    print('Error sending password reset email: $e');
+  }
+}
+
+

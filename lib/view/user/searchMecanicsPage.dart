@@ -51,8 +51,9 @@ class _SearchMechanicsPageState extends State<SearchMechanicsPage> {
       // final double minLon = widget.longitude;
       // final double maxLon = widget.longitude;
 
-      print("minimum latitude: $minLat");
-      print("minimum longitude: $minLon");
+      print("maximum latitude: $maxLat");
+      print(14.837593608029595 > 14.834505);
+      // print("minimum longitude: $minLon");
 
       // final QuerySnapshot snapshot = await FirebaseFirestore.instance
       //     .collection('mechanics')
@@ -120,7 +121,7 @@ class _SearchMechanicsPageState extends State<SearchMechanicsPage> {
                     itemCount: _mechanics!.length,
                     itemBuilder: (context, index) {
                       final mechanic = _mechanics![index].data() as Map<String, dynamic>;
-                      print(_mechanics![index].id.toString());
+                      // print(_mechanics![index].id.toString());
                       return MechanicCard(
                           id: _mechanics![index].id,
                           name: mechanic['mechanicName'],

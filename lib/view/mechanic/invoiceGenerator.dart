@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
@@ -6,9 +7,28 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../model/itemModel.dart';
 // import 'package:pdf/widgets.dart';
 
+String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+
 class InvoiceGeneratorScreen extends StatefulWidget {
+  const InvoiceGeneratorScreen({
+    super.key,
+    required this.customerName,
+    required this.docId,
+    required this.uid,
+    required this.userId,
+    required this.userAppointmentDocId,
+  });
+
+  final String customerName;
+  final String docId;
+  final String uid;
+  final String userId;
+  final String userAppointmentDocId;
+
   @override
   _InvoiceGeneratorScreenState createState() => _InvoiceGeneratorScreenState();
 }
@@ -34,16 +54,18 @@ class _InvoiceGeneratorScreenState extends State<InvoiceGeneratorScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextFormField(
-                  controller: _customerNameController,
-                  decoration: InputDecoration(labelText: 'Customer Name'),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter customer name';
-                    }
-                    return null;
-                  },
-                ),
+                Text("Bill to : ${capitalize(widget.customerName)}", style: TextStyle(fontSize: 20),),
+                // TextFormField(
+                //   controller: _customerNameController,
+                //  
+                //   decoration: InputDecoration(labelText: 'Customer Name'),
+                //   // validator: (value) {
+                //   //   if (value!.isEmpty) {
+                //   //     return 'Please enter customer name';
+                //   //   }
+                //   //   return null;
+                //   // },
+                // ),
                 SizedBox(height: 20),
                 TextFormField(
                   controller: itemController,
@@ -93,7 +115,11 @@ class _InvoiceGeneratorScreenState extends State<InvoiceGeneratorScreen> {
                 Align(
                   alignment: Alignment.center,
                   child: ElevatedButton(
-                    onPressed: () => _addItem(itemController.text.toString(), priceController.text),
+                    onPressed: () {
+                      if(_formKey.currentState!.validate()) {
+                        _addItem(itemController.text.toString(), priceController.text);
+                      }
+                    },
                     child: Text('Add Item'),
                   ),
                 ),
@@ -118,8 +144,20 @@ class _InvoiceGeneratorScreenState extends State<InvoiceGeneratorScreen> {
                 Align(
                   alignment: Alignment.center,
                   child: ElevatedButton(
-                    onPressed: _generateInvoice,
-                    child: Text('Generate Invoice'),
+                    onPressed: (){
+                      if (_items.isNotEmpty) {
+                        _generateInvoice(widget.docId, widget.userId, widget.uid, widget.userAppointmentDocId);
+                        Navigator.pop(context);
+                      }
+                      else{
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please add items'),
+                          ),
+                        );
+                      }
+                    },
+                    child: Text('Send Invoice'),
                   ),
                 ),
               ],
@@ -197,77 +235,102 @@ class _InvoiceGeneratorScreenState extends State<InvoiceGeneratorScreen> {
   //   // OpenFile.open(path);
   // }
 
-  Future<void> _generateInvoice() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+  Future<void> _generateInvoice(docId, userId, uid, userAppointmentDocId) async {
+    // if (_items.isNotEmpty) {
+      // return;
+      // print(_items);
+    // print("\n\n\ncalled\n\n");
+      updateUserBillStatus(docId, userId, userAppointmentDocId);
+      updateMechanicBillStatus(docId, uid);
+    // }
+    // else{
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text('Please add items'),
+    //     ),
+    //   );
+    // }
+//     final pdf = pw.Document();
+//     var data = await rootBundle.load("assets/fonts/OpenSans-Regular.ttf");
+//     var myFont = pw.Font.ttf(data);
+//
+//
+//     pdf.addPage(
+//       pw.Page(
+//         build: (pw.Context context) {
+//           return pw.Container(
+//             padding: pw.EdgeInsets.all(20),
+//             child: pw.Column(
+//               crossAxisAlignment: pw.CrossAxisAlignment.start,
+//               children: [
+//               pw.Text(
+//               'Invoice',
+//               style: pw.TextStyle(
+//                   fontSize: 24,
+//                   fontWeight: pw.FontWeight.bold,
+//                   font: myFont
+//                   // font: pw.Font.ttf(await rootBundle.load("fonts/arial.ttf")), // Use the custom font
+//             ),
+//           ),
+//           // Other text elements...
+//           ],
+//           ),
+//           );
+//         },
+//       ),
+//     );
+//
+//
+//     final Directory? downloadsDirectory = await getExternalStorageDirectory();
+//     final String downloadsPath = downloadsDirectory!.path;
+//
+// // Define the file path
+//     final String filePath = '$downloadsPath/invoice.pdf';
+//
+// // Write the PDF file to the downloads directory
+//     final File file = File(filePath);
+//     await file.writeAsBytes(await pdf.save());
+//     print("Successfully saved in: $downloadsPath");
+//     print(filePath);
 
-    final pdf = pw.Document();
-    var data = await rootBundle.load("assets/fonts/OpenSans-Regular.ttf");
-    var myFont = pw.Font.ttf(data);
-    // var myStyle = TextStyle(font: myFont);
+  }
 
-    // Define font fallbacks
-    // final fontFallback = pw.Font.ttf(await rootBundle.load("assets/fonts/Roboto-Regular.ttf"));
+// update the user's status
+  void updateUserBillStatus(docId, userId, userAppointmentDocId) async {
+    // Calculate total amount
+    double totalAmount = _items.fold<double>(0.0, (previousValue, item) => previousValue + item.price);
 
-    pdf.addPage(
-      pw.Page(
-        build: (pw.Context context) {
-          return pw.Container(
-            padding: pw.EdgeInsets.all(20),
-            child: pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
-              children: [
-              pw.Text(
-              'Invoice',
-              style: pw.TextStyle(
-                  fontSize: 24,
-                  fontWeight: pw.FontWeight.bold,
-                  font: myFont
-                  // font: pw.Font.ttf(await rootBundle.load("fonts/arial.ttf")), // Use the custom font
-            ),
-          ),
-          // Other text elements...
-          ],
-          ),
-          );
-        },
-      ),
-    );
+    await FirebaseFirestore.instance.collection('bookMechanic')
+        .doc(userId)
+        .collection("appointments")
+        .doc(userAppointmentDocId)
+        .update({
+          'bill': _items.map((item) => item.toMap()).toList(),
+          'totalBillAmount': totalAmount
+        });
+  }
 
-
-    // final String dir = (await getApplicationDocumentsDirectory()).path;
-    // final String path = '$dir/invoice.pdf';
-    // final File file = File(path);
-    // await file.writeAsBytes(await pdf.save());
-    // Get the downloads directory
-    final Directory? downloadsDirectory = await getExternalStorageDirectory();
-    final String downloadsPath = downloadsDirectory!.path;
-
-// Define the file path
-    final String filePath = '$downloadsPath/invoice.pdf';
-
-// Write the PDF file to the downloads directory
-    final File file = File(filePath);
-    await file.writeAsBytes(await pdf.save());
-    print("Successfully saved in: $downloadsPath");
-// Open the PDF file using the default PDF viewer
-//     OpenFile.open(filePath);
-//     await launchUrl(Uri.parse(filePath));
-    print(filePath);
-    // Open the PDF file
-    // You can use any PDF viewer or share the file as needed
-    // For example, you can use the `open_file` package to open the PDF:
-    // OpenFile.open(path);
+  // update the mechanics's status
+  void updateMechanicBillStatus(docId, uid) async {
+    // Calculate total amount
+    double totalAmount = _items.fold<double>(0.0, (previousValue, item) => previousValue + item.price);
+    await FirebaseFirestore.instance.collection('mechanics')
+        .doc(uid)
+        .collection("appointments")
+        .doc(docId)
+        .update({
+          'bill': _items.map((item) => item.toMap()).toList(),
+          'totalBillAmount': totalAmount
+        });
   }
 }
 
-class Item {
-  final String name;
-  final double price;
-
-  Item({required this.name, required this.price});
-}
+// class Item {
+//   final String name;
+//   final double price;
+//
+//   Item({required this.name, required this.price});
+// }
 
 
 // import 'package:flutter/material.dart';

@@ -76,7 +76,7 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Vehicle Help"),
+        title: Text("Onclick Mechanic"),
         centerTitle: true,
       ),
       body: Stack(

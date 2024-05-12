@@ -17,7 +17,7 @@ class AuthScreen extends StatelessWidget {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Vehicle Help'),
+            title: Text('Onclick Mechanic'),
             centerTitle: true,
             bottom: const TabBar(
               tabs: [

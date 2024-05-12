@@ -164,25 +164,66 @@ class _BookMechanicPageState extends State<BookMechanicPage> {
         // Handle the case where the user is not authenticated
         return;
       }
-      await FirebaseFirestore.instance.collection('bookMechanic').doc(uid).collection("appointments").add({
+
+      DocumentReference userAppointmentRef = await FirebaseFirestore.instance
+          .collection('bookMechanic')
+          .doc(uid)
+          .collection("appointments")
+          .add({
         'mechanicId': widget.mechanicId,
         'mechanicName': widget.mechanicName,
         'mechanicAddress': widget.mechanicAddress,
         'mechanicPricePerHour': widget.mechanicPricePerHour,
-        'userName': nameController.text, // Assuming you have controllers for name, contact, and description fields
-        'contactNumber': phoneController.text,
-        'problemDescription': problemController.text,
-        'status': 'pending', // Set the status as pending
-        'bookingTime': DateTime.now(), // You can add the booking time if needed
-      });
-
-      await FirebaseFirestore.instance.collection('mechanics').doc(widget.mechanicId).collection('appointments').add({
         'userName': nameController.text,
         'contactNumber': phoneController.text,
         'problemDescription': problemController.text,
         'status': 'pending',
+        'bill': [],
+        'paymentStatus': false,
+        'totalBillAmount': 0.0,
         'bookingTime': DateTime.now(),
       });
+
+      String userAppointmentDocId = userAppointmentRef.id;
+
+      // await FirebaseFirestore.instance.collection('bookMechanic').doc(uid).collection("appointments").add({
+      //   'mechanicId': widget.mechanicId,
+      //   'mechanicName': widget.mechanicName,
+      //   'mechanicAddress': widget.mechanicAddress,
+      //   'mechanicPricePerHour': widget.mechanicPricePerHour,
+      //   'userName': nameController.text, // Assuming you have controllers for name, contact, and description fields
+      //   'contactNumber': phoneController.text,
+      //   'problemDescription': problemController.text,
+      //   'status': 'pending', // Set the status as pending
+      //   'bookingTime': DateTime.now(), // You can add the booking time if needed
+      // });
+
+      DocumentReference mechanicAppointmentRef = await FirebaseFirestore.instance.collection('mechanics')
+          .doc(widget.mechanicId)
+          .collection('appointments')
+          .add({
+            'userId': uid,
+            'userName': nameController.text,
+            'contactNumber': phoneController.text,
+            'problemDescription': problemController.text,
+            'status': 'pending',
+            'bill': [],
+            'paymentStatus': false,
+            'bookingTime': DateTime.now(),
+            'totalBillAmount': 0.0,
+            'userAppointmentDocId': userAppointmentDocId
+          });
+
+      String mechanicAppointmentDocId = mechanicAppointmentRef.id;
+
+      await FirebaseFirestore.instance
+          .collection('bookMechanic')
+          .doc(uid)
+          .collection("appointments")
+          .doc(userAppointmentDocId)
+          .update({
+            'mechanicAppointmentDocId': mechanicAppointmentDocId
+          });
 
 
       setState(() {

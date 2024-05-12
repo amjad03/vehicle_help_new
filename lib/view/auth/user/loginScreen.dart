@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vehicle_help_new/view/auth/user/signupScreen.dart';
 
 import '../../user/homeScreenUser.dart';
+import '../forgotPasswordScreen.dart';
 
 
 
@@ -150,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextButton(
                       onPressed: () {
                         // Navigate to password reset screen
-                        // Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()));
                       },
                       child: const Text('Forgot Password?'),
                     ),

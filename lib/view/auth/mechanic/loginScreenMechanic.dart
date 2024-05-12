@@ -4,6 +4,7 @@ import 'package:vehicle_help_new/view/auth/mechanic/signupScreenMechanic.dart';
 
 import '../../mechanic/mechanicDashboard.dart';
 import '../../user/homeScreenUser.dart';
+import '../forgotPasswordScreen.dart';
 
 
 
@@ -151,7 +152,7 @@ class _LoginScreenState extends State<LoginScreenMechanic> {
                     TextButton(
                       onPressed: () {
                         // Navigate to password reset screen
-                        // Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()));
                       },
                       child: const Text('Forgot Password?'),
                     ),
